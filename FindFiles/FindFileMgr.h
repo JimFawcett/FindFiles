@@ -2,7 +2,7 @@
 #define FINDFILEMGR_H
 ///////////////////////////////////////////////////////////////////////
 // FindFileMgr.h - Find dates of files matching specified patterns   //
-// Ver 1.2                                                           //
+// Ver 1.3                                                           //
 // Jim Fawcett, CSE687 - Object Oriented Design, Fall 2018           //
 ///////////////////////////////////////////////////////////////////////
 /*
@@ -21,6 +21,9 @@
  *
  * Maintenance History:
  * --------------------
+ * Ver 1.3 : 24 Jun 2019
+ * - fixed bug in non-recursive operation
+ * - fixed bugs in options processing
  * Ver 1.2 : 24 Jun 2019
  * - added option to show file dates
  * Ver 1.1 : 24 Jun 2019
@@ -70,7 +73,7 @@ private:
   Utilities::ProcessCmdLine pcl_;
   Path path_;
   Patterns patterns_;
-  Regex regex_;
+  Regex regex_ = ".*";
   bool recursive_ = false;
   size_t numFiles_ = 0;
   size_t processedFiles_ = 0;
