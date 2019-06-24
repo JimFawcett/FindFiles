@@ -1,7 +1,7 @@
 #pragma once
 ///////////////////////////////////////////////////////////////////////
 // CodeUtilities.h - small, generally useful, helper classes         //
-// ver 1.2                                                           //
+// ver 1.3                                                           //
 // Language:    C++, Visual Studio 2017                              //
 // Application: Most Projects, CSE687 - Object Oriented Design       //
 // Author:      Jim Fawcett, Syracuse University, CST 4-187          //
@@ -23,6 +23,11 @@
 *
 * Maintenance History:
 * --------------------
+* ver 1.3 : 24 Jun 2019
+* - modified options processing - now have:
+*     default path = "."
+*     default pattern = "*.*"
+* - fixed test stub output
 * ver 1.2 : 22 Jun 2019
 * - redesigned handling of commandline args in ProcessCmdLine
 * - now expects path to be preceded by /P
@@ -77,7 +82,7 @@ namespace Utilities
     using Number = long int;
 
     ProcessCmdLine(int argc, char** argv, std::ostream& out = std::cout);
-    ProcessCmdLine() {};
+    ProcessCmdLine() : pOut_(&std::cout) {};
     void processCmdLine(int argc, char** arv, std::ostream& out = std::cout);
     bool parseError();
     Path path();
@@ -335,15 +340,15 @@ namespace Utilities
     msg_ << "\n  Command Line: [/opt arg]* [/opt]*";
     msg_ << "\n    /opt arg has option type - a character, and option argument, a literal string";
     msg_ << "\n    Examples:";
-    msg_ << "\n      /P ../dir            // starting path";
-    msg_ << "\n      /p *.h,*.cpp,*.cs    // file patterns";
-    msg_ << "\n      /n 42                // max items";
-    msg_ << "\n      /r threads|sockets   // regular expression";
+    msg_ << "\n      /P \"../..\"             // starting path";
+    msg_ << "\n      /p \"*.h,*.cpp,*.cs\"    // file patterns - no spaces";
+    msg_ << "\n      /n \"42\"                // max items";
+    msg_ << "\n      /R \"threads|sockets\"   // regular expression";
     msg_ << "\n    /option has option type with no argument";
     msg_ << "\n    Examples:";
-    msg_ << "\n      /s                   // recurse";
-    msg_ << "\n      /f                   // process files";
-    msg_ << "\n      /d                   // process directories";
+    msg_ << "\n      /s                     // recurse";
+    msg_ << "\n      /f                     // process files";
+    msg_ << "\n      /d                     // process directories";
     msg_ << "\n";
   }
 
