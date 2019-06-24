@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////
 // FindFileMgr.cpp - Find names of files or dirs matching regex      //
-// Ver 1.0                                                           //
+// Ver 1.1                                                           //
 // Jim Fawcett, https://github.com/JimFawcett/FindFiles, Summer 2019 //
 ///////////////////////////////////////////////////////////////////////
 
@@ -19,14 +19,17 @@
 
 void usage()
 {
-  std::cout << "\n  FindFiles version 1.0, 22 Jun 2019";
+  std::cout << "\n  FindFiles version 1.1, 22 Jun 2019";
   std::cout << "\n  Finds files or directories with name matching a regex\n";
-  std::cout << "\n  usage: FileDates /P path [/f] [/d] [/s] [/p pattern]* [/n numFiles]";
+  std::cout << "\n  usage: FindFiles /P path [/f] [/d] [/s] [/p pattern]* [/r regex]";
   std::cout << "\n    path = relative or absolute path of starting directory";
+  std::cout << "\n    /f for finding files";
+  std::cout << "\n    /d for finding directories";
   std::cout << "\n    /s for recursive search";
   std::cout << "\n    pattern is a pattern string of the form *.h,*.log, etc. with no spaces";
-  std::cout << "\n    numFiles is the number of files displayed";
-  std::cout << "\n  Example: FindFiles ../.. /s /d /r File|Dir";
+  std::cout << "\n    regex is a regular expression specifying targets, e.g., files or dirs";
+  std::cout << "\n  Example #1: FindFiles ../.. /s /f /r ^File|^Util";
+  std::cout << "\n  Example #2: FindFiles ../.. /s /d /r FindFiles$|Utilities$";
   std::cout << "\n";
 }
 bool FileMgr::processCmdLine(int argc, char** argv)
@@ -135,6 +138,16 @@ void FileMgr::search()
 
 void FileMgr::find(const Path& path)
 {
+  ++processedDirs_;
+  if (pcl_.hasOption('d'))
+  {
+    static std::regex re(regex_);
+    if (std::regex_search(path, re))
+    {
+      std::cout << "\n  " << path;
+    }
+  }
+
   std::vector<std::string> fileMatches;
 
   for (auto patt : pcl_.patterns())
@@ -168,7 +181,6 @@ void FileMgr::find(const Path& path)
     if (d != "." && d != "..")
     {
       find(path + "\\" + d);
-      ++processedDirs_;
     }
   }
 }

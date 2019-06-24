@@ -2,7 +2,7 @@
 #define FINDFILEMGR_H
 ///////////////////////////////////////////////////////////////////////
 // FindFileMgr.h - Find dates of files matching specified patterns   //
-// Ver 1.0                                                           //
+// Ver 1.1                                                           //
 // Jim Fawcett, CSE687 - Object Oriented Design, Fall 2018           //
 ///////////////////////////////////////////////////////////////////////
 /*
@@ -19,6 +19,8 @@
  *
  * Maintenance History:
  * --------------------
+ * Ver 1.1 : 24 Jun 2019
+ * - added /d option for finding directories
  * Ver 1.0 : 22 Jun 2019
  * - first release
  */
@@ -68,7 +70,7 @@ private:
   bool recursive_ = false;
   size_t numFiles_ = 0;
   size_t processedFiles_ = 0;
-  size_t processedDirs_ = 1;
+  size_t processedDirs_ = 0;
 };
 
 inline Utilities::ProcessCmdLine& FileMgr::pcl()
