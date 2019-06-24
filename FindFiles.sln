@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeUtilities", "Utilities\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StringUtilities", "Utilities\StringUtilities\Utilities.vcxproj", "{462B43B2-8B13-4178-BF2A-903F76F1985C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FileDates", "FindFiles\FindFiles.vcxproj", "{DDEE27FF-855E-4D10-AD7B-79CB8966EF13}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FindFiles", "FindFiles\FindFiles.vcxproj", "{DDEE27FF-855E-4D10-AD7B-79CB8966EF13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

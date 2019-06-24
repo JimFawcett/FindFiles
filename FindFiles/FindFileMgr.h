@@ -2,7 +2,7 @@
 #define FINDFILEMGR_H
 ///////////////////////////////////////////////////////////////////////
 // FindFileMgr.h - Find dates of files matching specified patterns   //
-// Ver 1.1                                                           //
+// Ver 1.2                                                           //
 // Jim Fawcett, CSE687 - Object Oriented Design, Fall 2018           //
 ///////////////////////////////////////////////////////////////////////
 /*
@@ -16,9 +16,13 @@
  * ---------------
  * FindFileMgr.h, FindFileMgr.cpp
  * FileSystem.h, FileSystem.cpp,
+ * CodeUtilities.h, 
+ * StringUtilities.h
  *
  * Maintenance History:
  * --------------------
+ * Ver 1.2 : 24 Jun 2019
+ * - added option to show file dates
  * Ver 1.1 : 24 Jun 2019
  * - added /d option for finding directories
  * Ver 1.0 : 22 Jun 2019

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////
 // FindFileMgr.cpp - Find names of files or dirs matching regex      //
-// Ver 1.1                                                           //
+// Ver 1.2                                                           //
 // Jim Fawcett, https://github.com/JimFawcett/FindFiles, Summer 2019 //
 ///////////////////////////////////////////////////////////////////////
 
@@ -21,15 +21,16 @@ void usage()
 {
   std::cout << "\n  FindFiles version 1.1, 22 Jun 2019";
   std::cout << "\n  Finds files or directories with name matching a regex\n";
-  std::cout << "\n  usage: FindFiles /P path [/f] [/d] [/s] [/p pattern]* [/r regex]";
+  std::cout << "\n  usage: FindFiles /P path [/f] [/D] [/d] [/s] [/p pattern]* [/r regex]";
   std::cout << "\n    path = relative or absolute path of starting directory";
   std::cout << "\n    /f for finding files";
+  std::cout << "\n    /D for showing file dates";
   std::cout << "\n    /d for finding directories";
   std::cout << "\n    /s for recursive search";
   std::cout << "\n    pattern is a pattern string of the form *.h,*.log, etc. with no spaces";
   std::cout << "\n    regex is a regular expression specifying targets, e.g., files or dirs";
-  std::cout << "\n  Example #1: FindFiles ../.. /s /f /r ^File|^Util";
-  std::cout << "\n  Example #2: FindFiles ../.. /s /d /r FindFiles$|Utilities$";
+  std::cout << "\n  Example #1: FindFiles /P ../.. /s /f /D /r \"^File|^Util\" /p *.h,*.cpp,*.cs,*.html,*.md";
+  std::cout << "\n  Example #2: FindFiles /P ../.. /s /d /r \"FindFiles$|Utilities$\" /p *.h,*.cpp,*.cs,*.html,*.md";
   std::cout << "\n";
 }
 bool FileMgr::processCmdLine(int argc, char** argv)
@@ -115,22 +116,42 @@ void FileMgr::search()
     find(fullPath);
   else
   {
+    std::cout << "\n  " << fullPath;
+
     std::vector<std::string> fileMatches;
 
     for (auto patt : pcl_.patterns())
     {
       std::vector<std::string> files = FileSystem::Directory::getFiles(fullPath, patt);
-      for (auto file : files)
+      for (auto f : files)
       {
         if (pcl_.hasOption('f'))
         {
           static std::regex re(regex_);
-          if (std::regex_search(file, re))
+          if (std::regex_search(f, re))
           {
-            fileMatches.push_back(file);
+            if (pcl_.hasOption('D'))
+            {
+              std::string file = fullPath + "\\" + f;
+              FileSystem::FileInfo fi(file);
+              std::string date = fi.date();
+              date = reformatDate(date);
+              fileMatches.push_back(date + " -- " + f);
+            }
+            else
+            {
+              fileMatches.push_back(f);
+            }
             ++processedFiles_;
           }
         }
+      }
+    }
+    if (fileMatches.size() > 0)
+    {
+      for (auto file : fileMatches)
+      {
+        std::cout << "\n    " << file;
       }
     }
   }
@@ -161,7 +182,18 @@ void FileMgr::find(const Path& path)
         static std::regex re(regex_);
         if (std::regex_search(f, re))
         {
-          fileMatches.push_back(f);
+          if (pcl_.hasOption('D'))
+          {
+            std::string file = path + "\\" + f;
+            FileSystem::FileInfo fi(file);
+            std::string date = fi.date();
+            date = reformatDate(date);
+            fileMatches.push_back(date + " -- " + f);
+          }
+          else
+          {
+            fileMatches.push_back(f);
+          }
           ++processedFiles_;
         }
       }
@@ -206,8 +238,10 @@ using File = std::string;
 int main(int argc, char* argv[])
 {
   FileMgr fm;
-  fm.processCmdLine(argc, argv);
 
+  //usage();   // here just to debug usage statement
+
+  fm.processCmdLine(argc, argv);
   Utilities::ProcessCmdLine& pcl = fm.pcl();
 
   std::cout << "\n  FindFiles";
