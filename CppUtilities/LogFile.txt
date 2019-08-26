@@ -1,0 +1,7 @@
+
+
+  Demonstration Log : no author
+  Mon Jun 24 17:18:29 2019
+    Hi from main
+    hi again
+  end of log

@@ -6,7 +6,8 @@
 
 #include "FindFileMgr.h"
 #include "FileSystem.h"
-#include "../Utilities/CodeUtilities/CodeUtilities.h"
+#include "../CppUtilities/CodeUtilities/CodeUtilities.h"
+//#include "../Utilities/CodeUtilities/CodeUtilities.h"
 //#define STATIC_LIB
 #include <iostream>
 #include <iomanip>
@@ -22,7 +23,7 @@ std::string usageMsg()
   std::ostringstream out;
   out << "\n  FindFiles version 1.3, 24 Jun 2019";
   out << "\n  Finds files or directories with name matching a regex\n";
-  out << "\n  usage: FindFiles /P path [/f] [/D] [/d] [/s] [/v] [/h] [/p pattern]* [/r regex]";
+  out << "\n  usage: FindFiles /P path [/f] [/D] [/d] [/s] [/v] [/h] [/p pattern]* [/R regex]";
   out << "\n    path = relative or absolute path of starting directory";
   out << "\n    /f for finding files";
   out << "\n    /D for showing file dates";
@@ -32,8 +33,8 @@ std::string usageMsg()
   out << "\n    /h show this message and exit";
   out << "\n    pattern is a pattern string of the form *.h,*.log, etc. with no spaces";
   out << "\n    regex is a regular expression specifying targets, e.g., files or dirs\n";
-  out << "\n  Example #1: FindFiles /P ../.. /s /f /D /r \"^File|^Util\" /p *.h,*.cpp,*.cs,*.html,*.md";
-  out << "\n  Example #2: FindFiles /P ../.. /s /d /r \"FindFiles$|Utilities$\" /p *.h,*.cpp,*.cs,*.html,*.md";
+  out << "\n  Example #1: FindFiles /P ../.. /s /f /D /R \"^File|^Util\" /p *.h,*.cpp,*.cs,*.html,*.md";
+  out << "\n  Example #2: FindFiles /P ../.. /s /d /R \"FindFiles$|Utilities$\" /p *.h,*.cpp,*.cs,*.html,*.md";
   out << "\n";
   return out.str();
 }
@@ -44,7 +45,7 @@ void usage()
 
 bool FileMgr::processCmdLine(int argc, char** argv)
 {
-  pcl_.processCmdLine(argc, argv);
+  pcl_.process(argc, argv);
   if (pcl_.parseError())
     return false;
 
@@ -172,12 +173,17 @@ void FileMgr::search()
 void FileMgr::find(const Path& path)
 {
   ++processedDirs_;
+
+  if(!pcl_.hasOption('H'))
+    std::cout << "\n  " << path;
+
   if (pcl_.hasOption('d'))
   {
     static std::regex re(regex_);
     if (std::regex_search(path, re))
     {
-      std::cout << "\n  " << path;
+      if(pcl_.hasOption('H'))
+        std::cout << "\n  " << path;
     }
   }
 
@@ -240,8 +246,9 @@ void FileMgr::showProcessed()
 #include <map>
 #include <iostream>
 #include <functional>
-#include "../Utilities/CodeUtilities/CodeUtilities.h"
-#include "../Utilities/StringUtilities/StringUtilities.h"
+#include "../CppUtilities/CodeUtilities/CodeUtilities.h"
+#include "../CppUtilities/StringUtilities/StringUtilities.h"
+//#include "../Utilities/StringUtilities/StringUtilities.h"
 
 using Path = std::string;
 using File = std::string;
@@ -276,7 +283,7 @@ int main(int argc, char* argv[])
       std::cout << "\n    optns = ";
       for (auto opt : fm.pcl().options())
       {
-        std::cout << opt << " ";
+        std::cout << '/' << opt.first << " " << opt.second << " ";
       }
     }
     std::cout << "\n    regex = " << fm.regex() << "\n";

@@ -26,6 +26,11 @@
     <ClInclude Include="FindFileMgr.h" />
     <ClInclude Include="FileSystem.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CppUtilities\CodeUtilities\CodeUtilities.vcxproj">
+      <Project>{d6e40902-7a6c-4af9-b69a-68e7b80b722c}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DDEE27FF-855E-4D10-AD7B-79CB8966EF13}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
